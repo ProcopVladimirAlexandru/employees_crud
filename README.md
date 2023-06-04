@@ -1,1 +1,1 @@
-Should complete this in the future sometime.
+Simple Django CRUD Server for employee type data with a few Pandas based statistics.
