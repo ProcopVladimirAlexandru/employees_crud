@@ -1,10 +1,10 @@
-import json
 import logging
 import datetime
 from ..models import Employee
+from ..utils import check_json, parse_json, validate_model_object
 from django.views import View
 from django.forms.models import model_to_dict
-from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import (JsonResponse,
                          HttpResponseBadRequest, HttpResponseServerError,
                          HttpResponseNotFound, HttpResponse)
@@ -30,12 +30,12 @@ class EmployeeView(View):
         self._logger = logging.getLogger(EmployeeView.LOGGER_NAME)
 
     def post(self, request):
-        error_response = Utils.check_json(request)
+        error_response = check_json(request)
         if error_response:
             self._logger.error(error_response.content.decode())
             return error_response
 
-        success, parse_result = Utils.parse_json(request)
+        success, parse_result = parse_json(request)
         if not success:
             self._logger.error(parse_result.content.decode())
             return parse_result
@@ -123,12 +123,12 @@ class EmployeeView(View):
             self._logger.error(err_msg)
             return HttpResponseBadRequest(err_msg)
 
-        error_response = Utils.check_json(request)
+        error_response = check_json(request)
         if error_response:
             self._logger.error(error_response.content.decode())
             return error_response
 
-        success, parse_result = Utils.parse_json(request)
+        success, parse_result = parse_json(request)
         if not success:
             self._logger.error(parse_result.content.decode())
             return parse_result
@@ -179,36 +179,8 @@ class EmployeeView(View):
             return converted_dob
         employee.date_of_birth = converted_dob
 
-        error_response = Utils.validate_model_object(employee)
+        error_response = validate_model_object(employee)
         if error_response:
             return error_response
         return
 
-
-class Utils:
-    # TODO move to utils module / package even
-    @staticmethod
-    def check_json(request):
-        if 'Content-Type' not in request.headers:
-            return HttpResponseBadRequest('Missing Content-Type header.')
-        if request.headers['Content-Type'] != 'application/json':
-            return HttpResponseBadRequest('Expected Content-Type application/json.')
-        return
-
-    @staticmethod
-    def parse_json(request):
-        try:
-            obj = json.loads(request.body)
-        except Exception as ex:
-            return False, HttpResponseBadRequest('Could not parse body as JSON.')
-        return True, obj
-
-    @staticmethod
-    def validate_model_object(obj):
-        try:
-            obj.full_clean()
-        except ValidationError as ex:
-            return HttpResponseBadRequest(str(ex))
-        except Exception as ex:
-            return HttpResponseServerError('Unexpected error during validation.')
-        return
