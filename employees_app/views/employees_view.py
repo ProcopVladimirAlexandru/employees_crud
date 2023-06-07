@@ -17,6 +17,7 @@ logging.basicConfig(format=LOGGER_FORMAT, level=LOGGER_LEVEL)
 
 
 class EmployeeView(View):
+    # TODO add type hints for args and returned values
     LOGGER_NAME = 'employee_view_logger'
     INPUT_DATE_FORMAT = '%d/%m/%Y'
     DB_DATE_FORMAT = '%Y-%m-%d'
@@ -106,7 +107,8 @@ class EmployeeView(View):
                 if request.GET.get('gender', None):
                     filters['gender'] = request.GET.get('gender')
 
-                employees = Employee.objects.filter(**filters).order_by(order_by)[page_number*page_size:(page_number+1)*page_size]
+                employees = Employee.objects.filter(**filters).order_by(order_by)[
+                            page_number*page_size:(page_number+1)*page_size]
                 # TODO set the safe parameter back to True and impose a convention on a JSON with payload dict
                 # TODO such as {'payload': [...], ...}
                 return JsonResponse([v for v in employees.values()],
