@@ -23,7 +23,7 @@ def avg_industry_age(request):
     except Exception as ex:
         err_msg = 'Unexpected error. Could not compute statistic.'
         logger.error(f'{err_msg}. Error: {ex}', exc_info=True)
-        return HttpResponseServerError()
+        return HttpResponseServerError(err_msg)
     return JsonResponse({'statistics': stats_list})
 
 
@@ -36,7 +36,7 @@ def avg_industry_salary(request):
     except Exception as ex:
         err_msg = 'Unexpected error. Could not compute statistic.'
         logger.error(f'{err_msg}. Error: {ex}', exc_info=True)
-        return HttpResponseServerError()
+        return HttpResponseServerError(err_msg)
     return JsonResponse({'statistics': stats_list})
 
 
@@ -49,7 +49,7 @@ def avg_experience_salary(request):
     except Exception as ex:
         err_msg = 'Unexpected error. Could not compute statistic.'
         logger.error(f'{err_msg}. Error: {ex}', exc_info=True)
-        return HttpResponseServerError()
+        return HttpResponseServerError(err_msg)
     return JsonResponse({'statistics': stats_list})
 
 
@@ -77,5 +77,5 @@ def interesting_statistics(request):
     except Exception as ex:
         err_msg = 'Unexpected error. Could not compute statistic.'
         logger.error(f'{err_msg}. Error: {ex}', exc_info=True)
-        return HttpResponseServerError()
+        return HttpResponseServerError(err_msg)
     return JsonResponse({'statistics': stats})
