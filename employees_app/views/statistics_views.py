@@ -61,8 +61,8 @@ def interesting_statistics(request):
             lambda d: d.days // 365)
         stats = dict()
         df_age_salary_corr = df[['age', 'salary']].dropna()
-        stats['age_salary_corr'] = np.corrcoef(df_age_salary_corr['age'].dropna(),
-                                               df_age_salary_corr['salary'].dropna())[0, 1]
+        stats['age_salary_corr'] = np.corrcoef(df_age_salary_corr['age'],
+                                               df_age_salary_corr['salary'])[0, 1]
 
         # TODO address missing values better
         temp_dict = df.groupby(['gender'])['salary'].median().to_dict()
