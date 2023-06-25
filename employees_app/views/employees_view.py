@@ -58,7 +58,7 @@ class EmployeeView(View):
 
     def delete(self, request):
         _id = request.GET.get('id', None)
-        if not _id:
+        if _id is None:
             err_msg = 'Specify "id" query parameter.'
             self._logger.error(err_msg)
             return HttpResponseBadRequest(err_msg)
@@ -120,7 +120,7 @@ class EmployeeView(View):
 
     def put(self, request):
         _id = request.GET.get('id', None)
-        if not _id:
+        if _id is None:
             err_msg = 'Specify "id" query parameter.'
             self._logger.error(err_msg)
             return HttpResponseBadRequest(err_msg)
