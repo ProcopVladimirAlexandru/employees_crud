@@ -78,7 +78,7 @@ class EmployeeView(View):
 
     def get(self, request):
         _id = request.GET.get('id', None)
-        if _id:
+        if _id is None:
             # get one
             try:
                 return JsonResponse(model_to_dict(Employee.objects.get(pk=_id)))
